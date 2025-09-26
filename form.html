@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Marks Manager (HTML only)</title>
+  <scrpit src="for,.js"</script
+</head>
+<body>
+  <h1>Student Marks Manager</h1>
+
+  <h2>1) Add Student</h2>
+  <p>Enter the student's name and marks, then click <em>Add Student</em>.</p>
+  <label for="name">Student name</label>
+  <input id="name" type="text">
+  <br>
+  <label for="marks">Marks</label>
+  <input id="marks" type="number">
+  <br>
+  <button>Add Student</button>
+  <button>Clear</button>
+  <button>Reset List</button>
+
+  <h2>2) Actions</h2>
+  <p>Use the buttons below to manage the list.</p>
+  <button>Show All Students</button>
+  <button>Show Passed (≥ 40)</button>
+  <button>Calculate Average</button>
+  <button>Find Topper</button>
+
+  <p>
+    Search by name: <input id="search" type="text" placeholder="Search by name…">
+  </p>
+
+  <h2>Students</h2>
+  <table border="1" cellpadding="6">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Marks</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Student rows will go here -->
+    </tbody>
+  </table>
+
+  <p>
+    Note: This file is plain HTML only. To make the buttons work (add, filter, average, topper), JavaScript is required.
+  </p>
+</body>
+</html>
