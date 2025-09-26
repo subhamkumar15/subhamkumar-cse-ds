@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Calculator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #1e1e1e;
+      transition: background-color 0.3s ease;
+    }
+
+    body.light-mode {
+      background-color: #f4f4f4;
+    }
+
+    .calculator {
+      background: #222;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+      width: 340px;
+      transition: background-color 0.3s ease;
+    }
+
+    body.light-mode .calculator {
+      background: #fff;
+      box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .display {
+      margin-bottom: 20px;
+      text-align: right;
+    }
+
+    #screen {
+      width: 100%;
+      height: 55px;
+      background-color: #111;
+      color: white;
+      font-size: 2.2em;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      text-align: right;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-mode #screen {
+      background-color: #eee;
+      color: #222;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    button {
+      background-color: #333;
+      color: white;
+      font-size: 1.2em;
+      border: none;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+
+    button:active {
+      background-color: #555;
+    }
+
+    button.operator {
+      background-color: #ff9500;
+    }
+
+    button.operator:active {
+      background-color: #ff7c00;
+    }
+
+    button.equals {
+      grid-column: span 2;
+      background-color: #00c853;
+    }
+
+    button.equals:active {
+      background-color: #00b248;
+    }
+
+    button.sci {
+      background-color: #0077ff;
+      font-size: 1em;
+    }
+
+    button.sci:active {
+      background-color: #005fcc;
+    }
+
+    body.light-mode button {
+      background-color: #ddd;
+      color: #222;
+    }
+
+    body.light-mode button.operator {
+      background-color: #ffa726;
+      color: #222;
+    }
+
+    body.light-mode button.operator:active {
+      background-color: #fb8c00;
+    }
+
+    body.light-mode button.equals {
+      background-color: #66bb6a;
+      color: #222;
+    }
+
+    body.light-mode button.equals:active {
+      background-color: #4caf50;
+    }
+
+    body.light-mode button.sci {
+      background-color: #42a5f5;
+      color: #222;
+    }
+
+    body.light-mode button.sci:active {
+      background-color: #1e88e5;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display">
+      <input id="screen" type="text" disabled />
+    </div>
+    <div class="buttons">
+      <!-- Numbers and operators -->
+      <button class="btn" onclick="appendToScreen('7')">7</button>
+      <button class="btn" onclick="appendToScreen('8')">8</button>
+      <button class="btn" onclick="appendToScreen('9')">9</button>
+      <button class="btn operator" onclick="appendToScreen('+')">+</button>
+
+      <button class="btn" onclick="appendToScreen('4')">4</button>
+      <button class="btn" onclick="appendToScreen('5')">5</button>
+      <button class="btn" onclick="appendToScreen('6')">6</button>
+      <button class="btn operator" onclick="appendToScreen('-')">-</button>
+
+      <button class="btn" onclick="appendToScreen('1')">1</button>
+      <button class="btn" onclick="appendToScreen('2')">2</button>
+      <button class="btn" onclick="appendToScreen('3')">3</button>
+      <button class="btn operator" onclick="appendToScreen('*')">*</button>
+
+      <button class="btn" onclick="appendToScreen('0')">0</button>
+      <button class="btn" onclick="appendToScreen('.')">.</button>
+      <button class="btn" onclick="clearScreen()">C</button>
+      <button class="btn operator" onclick="appendToScreen('/')">/</button>
+
+      <!-- Scientific buttons -->
+      <button class="btn sci" onclick="appendToScreen('sin(')">sin</button>
+      <button class="btn sci" onclick="appendToScreen('cos(')">cos</button>
+      <button class="btn sci" onclick="appendToScreen('tan(')">tan</button>
+      <button class="btn sci" onclick="appendToScreen('sqrt(')">√</button>
+      <button class="btn sci" onclick="appendToScreen('ln(')">ln</button>
+      <button class="btn sci" onclick="appendToScreen('^')">^</button>
+      <button class="btn sci" onclick="appendToScreen('π')">π</button>
+      <button class="btn sci" onclick="appendToScreen('e')">e</button>
+
+      <!-- Equals and mode toggles -->
+      <button class="btn equals" onclick="calculateResult()">=</button>
+      <button class="btn" onclick="toggleMode()" id="modeToggle">🌙</button>
+      <button class="btn" onclick="toggleAngleMode()" id="angleMode">Deg</button>
+    </div>
+  </div>
+
+  <script>
+    let isDegree = true;
+
+    function appendToScreen(value) {
+      const screen = document.getElementById('screen');
+      if (screen.value === 'Error' || screen.value === 'Infinity' || screen.value === 'NaN') {
+        screen.value = '';
+      }
+      screen.value += value;
+    }
+
+    function clearScreen() {
+      document.getElementById('screen').value = '';
+    }
+
+    function calculateResult() {
+      let expression = document.getElementById('screen').value;
+      try {
+        expression = expression
+          .replace(/sqrt/g, 'Math.sqrt')
+          .replace(/sin/g, 'Math.sin')
+          .replace(/cos/g, 'Math.cos')
+          .replace(/tan/g, 'Math.tan')
+          .replace(/ln/g, 'Math.log')
+          .replace(/\^/g, '**')
+          .replace(/π/g, 'Math.PI')
+          .replace(/e/g, 'Math.E');
+
+        // If degree mode is ON, convert trig arguments
+        if (isDegree) {
+          expression = expression
+            .replace(/Math\.sin\(([^)]+)\)/g, 'Math.sin(($1) * Math.PI / 180)')
+            .replace(/Math\.cos\(([^)]+)\)/g, 'Math.cos(($1) * Math.PI / 180)')
+            .replace(/Math\.tan\(([^)]+)\)/g, 'Math.tan(($1) * Math.PI / 180)');
+        }
+
+        let result = eval(expression);
+
+        if (typeof result === 'number' && !isNaN(result) && isFinite(result)) {
+          result = +result.toFixed(8);
+          document.getElementById('screen').value = result;
+        } else {
+          throw new Error('Math Error');
+        }
+      } catch (error) {
+        document.getElementById('screen').value = 'Error';
+      }
+    }
+
+    function toggleMode() {
+      const body = document.body;
+      body.classList.toggle('light-mode');
+
+      const btn = document.getElementById('modeToggle');
+      if (body.classList.contains('light-mode')) {
+        btn.textContent = '🌞';
+      } else {
+        btn.textContent = '🌙';
+      }
+    }
+
+    function toggleAngleMode() {
+      isDegree = !isDegree;
+      document.getElementById('angleMode').textContent = isDegree ? 'Deg' : 'Rad';
+    }
+
+    // Keyboard input support
+    document.addEventListener("keydown", function(event) {
+      const key = event.key;
+      if(/[0-9+\-*/.^()]/.test(key)) {
+        appendToScreen(key);
+      } else if (key === "Enter") {
+        calculateResult();
+      } else if (key === "Backspace") {
+        let screen = document.getElementById("screen");
+        screen.value = screen.value.slice(0, -1);
+      } else if (key === "Escape") {
+        clearScreen();
+      }
+    });
+  </script>
+</body>
+</html>
