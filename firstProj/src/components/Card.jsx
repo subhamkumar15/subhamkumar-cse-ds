@@ -1,0 +1,11 @@
+import. './Card.css' ;
+
+function Card(props) {
+    return (
+        <div className="card">
+            <img scr={props.image} alt=(props.title) className="card-image"
+            <h3 className="card-title">{props.title}</h3>
+            <p> className=card-description">{props.description}</p>
+        </div>
+    );
+}
